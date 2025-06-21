@@ -1,23 +1,36 @@
-import Navbar from "@/src/components/navbar";
-import TopContainer from "@/src/components/topContainer";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import { Text } from "react-native";
+import { Stack, usePathname } from "expo-router";
+import { Image, Text } from "react-native";
+import Navbar from "../src/components/navbar";
+import TopContainer from "../src/components/topContainer";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    'Arista': require('../assets/fonts/Arista-Pro-Regular-trial.ttf'),
+    Arista: require("../assets/fonts/Arista-Pro-Regular-trial.ttf"),
   });
+  const pathname = usePathname();
 
   if (!fontsLoaded) {
-    return <Text>Loading fonts...</Text>; // or custom loading screen
+    return <Text>Loading fonts...</Text>; // TODO custom loading screen
   }
 
   return (
     <>
       <TopContainer />
-      <Stack screenOptions={{ headerShown: false }}/>
-
+      {pathname === "/" && (
+        <Image
+          style={{
+            width: 220,
+            height: 240,
+            position: "absolute",
+            top: 50,
+            right: 10,
+            zIndex: 1000, 
+          }}
+          source={require("../assets/images/frontGirlPng.png")}
+        />
+      )}
+      <Stack screenOptions={{ headerShown: false }} />
       <Navbar />
     </>
   );
