@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function TopContainer() {
+type TopContainerProps = {
+    TitlePage: string;
+};
 
+export default function TopContainer({ TitlePage }: TopContainerProps) {
     return (
-        <View style={styles.container}>
+        <View style={styles.container}> 
+            <Text style={styles.text}>{TitlePage}</Text>
             <Text style={styles.text}>StudyNow</Text>
         </View>
     );

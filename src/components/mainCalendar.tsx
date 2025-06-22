@@ -12,7 +12,6 @@ export default function MainCalendar() {
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        backgroundColor: '#ffbd59',
         width: "90%",
         position: "absolute" as const,
         top: 110,

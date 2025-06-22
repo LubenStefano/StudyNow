@@ -1,13 +1,28 @@
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import { Text } from "react-native";
 import Navbar from "../src/components/navbar";
 import TopContainer from "../src/components/topContainer";
 
 export default function RootLayout() {
+  const pathname = usePathname();
+
+  const TitlePage: string = (() => {
+    switch (pathname) {
+      case "/events":
+        return "Events";
+      case "/profile":
+        return "Profile";
+      case "/register":
+        return "Register";
+      default:
+        return "Calendar";
+    }
+  })();
+
   const [fontsLoaded] = useFonts({
     Ubuntu: require("../assets/fonts/Ubuntu.ttf"),
-    ArchivoBlack: require("../assets/fonts/ArchivoBlack.ttf")
+    ArchivoBlack: require("../assets/fonts/ArchivoBlack.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -16,7 +31,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <TopContainer />
+      <TopContainer TitlePage={TitlePage} />
       <Stack screenOptions={{ headerShown: false }} />
       <Navbar />
     </>
