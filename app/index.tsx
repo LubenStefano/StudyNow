@@ -1,131 +1,102 @@
-import Bee from "@/src/components/Bee";
-import CustomButton from "@/src/components/CustomButton";
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import EventCard from "../src/components/eventCard";
+import useEvents from "../src/hooks/useEvents";
+import useLoader from "../src/hooks/useLoader";
 
 export default function SignIn() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { events, loading, loadEvents } = useEvents();
+  const { renderLoader } = useLoader(styles.loader);
 
-  const handleSignIn = () => {
-    console.log("Username:", username);
-    console.log("Password:", password);
-    // TODO: Add authentication logic here
+  const [sections, setSections] = useState({
+    upcoming: false,
+    waiting: false,
+    finished: false,
+  });
+
+  const toggleSection = async (section: "upcoming" | "waiting" | "finished") => {
+    setSections((prev) => ({ ...prev, [section]: !prev[section] })); // Toggle section state
+    if (!sections[section] && !events[section]) {
+      loadEvents(section); 
+    }
   };
+
+  const renderSection = (title: string, type: "upcoming" | "waiting" | "finished") => (
+    <View style={styles.section}>
+      <TouchableOpacity onPress={() => toggleSection(type)}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+      </TouchableOpacity>
+      {sections[type] && (
+        loading[type] ? (
+          renderLoader(true) // Use loader here
+        ) : (
+          <FlatList
+            data={events[type] || []}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <EventCard
+                title={item.title}
+                date={item.date}
+                type={item.type}
+                style={styles.eventCard}
+              />
+            )}
+          />
+        )
+      )}
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/logoDesign.png")}
-        style={styles.img}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={["upcoming", "waiting", "finished"]}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) =>
+          renderSection(
+            sections[item as "upcoming" | "waiting" | "finished"]
+              ? item === "upcoming"
+                ? "Upcoming Events ▲"
+                : item === "waiting"
+                ? "Waiting for Result ▲"
+                : "Finished Events ▲"
+              : item === "upcoming"
+              ? "Upcoming Events ▼"
+              : item === "waiting"
+              ? "Waiting for Result ▼"
+              : "Finished Events ▼",
+            item as "upcoming" | "waiting" | "finished"
+          )
+        }
       />
-
-      <Text style={styles.title}>Username</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-
-      <Text style={styles.title}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <CustomButton
-        onPress={handleSignIn}
-        style={{ width: "80%" }}
-        text="Sign In"
-      />
-
-      <View style={styles.register}>
-        <Text style={styles.registerText}>
-          New to <Text style={{ fontWeight: "bold", fontFamily: "Arista", fontSize: 19 }}>Study</Text>
-          <Text style={{ fontWeight: "bold", color: "#ffde59", fontFamily: "Arista",  fontSize: 19}}>Now</Text> ?
-        </Text>
-        <Text
-          style={styles.signUpText}
-          onPress={() => router.push("/register")}
-        >
-          Sign Up
-        </Text>
-      </View>
-
-      <Bee style={styles.bee} />
     </View>
-  );
+  ); 
 }
-
-const { height: screenHeight } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
     backgroundColor: "#ffffff",
-    paddingTop: screenHeight * 0.12, // 12% of screen height for responsive top padding
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: "#545454",
-    alignSelf: "flex-start",
-    marginLeft: "14%",
+  section: {
+    marginBottom: 20,
+    width: "90%",
+    alignSelf: "center",
+    backgroundColor: "#ffffff",
   },
-  input: {
-    width: "80%",
-    height: 60,
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    borderRadius: 35,
-    paddingHorizontal: 15,
-    marginBottom: 30,
-    fontSize: 16,
-    color: "#cccccc",
-  },
-
-  buttonText: {
-    color: "#ffffff",
-    fontSize: 18,
+  sectionTitle: {
+    fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
   },
-  img: {
-    width: "100%",
-    aspectRatio: 2,
-    resizeMode: "contain",
+  eventCard: {
     marginBottom: 20,
   },
-  register: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    bottom: 50,
-    width: "100%",
-  },
-  registerText: {
-    fontSize: 19,
-  },
-  signUpText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textDecorationLine: "underline",
-    marginLeft: 5,
-  },
-  bee: {
-    position: "absolute",
-    bottom: 70,
-    left: -120,
-    height: "9%",
-    resizeMode: "contain",
-    transform: [{ rotateY: "180deg" }],
+  loader: {
+    left: "40%",
   },
 });
