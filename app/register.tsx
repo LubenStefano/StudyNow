@@ -1,4 +1,5 @@
 import CustomButton from "@/src/components/CustomButton";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TextInput, View } from "react-native";
 
@@ -60,7 +61,7 @@ export default function Register() {
         </Text>
         <Text
           style={styles.signInText}
-          onPress={() => console.log("Navigate to Sign Ipn")}
+           onPress={() => router.push("/")}
         >
           Sign In
         </Text>
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 30,
     fontSize: 16,
+    color: "#cccccc",
   },
 
   buttonText: {

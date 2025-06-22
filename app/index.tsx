@@ -1,9 +1,11 @@
 import Bee from "@/src/components/Bee";
 import CustomButton from "@/src/components/CustomButton";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function SignIn() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -50,7 +52,7 @@ export default function SignIn() {
         </Text>
         <Text
           style={styles.signUpText}
-          onPress={() => console.log("Navigate to Sign Up")}
+          onPress={() => router.push("/register")}
         >
           Sign Up
         </Text>
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 30,
     fontSize: 16,
+    color: "#cccccc",
   },
 
   buttonText: {
