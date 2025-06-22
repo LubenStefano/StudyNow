@@ -23,17 +23,20 @@ export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Ubuntu: require("../assets/fonts/Ubuntu.ttf"),
     ArchivoBlack: require("../assets/fonts/ArchivoBlack.ttf"),
+    Arista: require("../assets/fonts/Arista.ttf"),
   });
 
   if (!fontsLoaded) {
     return <Text>Loading fonts...</Text>; // TODO custom loading screen
   }
 
+  const showNavbarAndTopContainer = pathname !== "/" && pathname !== "/register"; //TODO CHANGE THIS "/'"
+
   return (
     <>
-      <TopContainer TitlePage={TitlePage} />
+      {showNavbarAndTopContainer && <TopContainer TitlePage={TitlePage} />}
       <Stack screenOptions={{ headerShown: false }} />
-      <Navbar />
+      {showNavbarAndTopContainer && <Navbar />}
     </>
   );
 }

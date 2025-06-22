@@ -3,13 +3,14 @@ import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-nativ
 interface AddEventButtonProps {
   onPress?: () => void;
   style?: ViewStyle;
+  text: string
 }
 
-export default function CustomButton({ onPress, style}: AddEventButtonProps) {
+export default function CustomButton({ onPress, style, text}: AddEventButtonProps) {
   return (
     <View style={[styles.container , style]}>
       <TouchableOpacity style={styles.button } onPress={onPress} >
-        <Text style={styles.text}>Add Event </Text>
+        <Text style={styles.text}>{text}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
+        // flex: 1,
     },
     button: {
         padding: 20,

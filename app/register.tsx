@@ -1,23 +1,129 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import CustomButton from "@/src/components/CustomButton";
+import React, { useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Register() {
+ const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+
+  const handleSignUp = () => {
+    console.log("Username:", username);
+    console.log("Password:", password);
+    console.log("Repeat Password:", repeatPassword);
+    // TODO: Add authentication logic here
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Register Page</Text>
+      <Image
+        source={require("../assets/images/logoDesign.png")}
+        style={styles.img}
+      />
+
+      <Text style={styles.title}>Username</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <Text style={styles.title}>Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <Text style={styles.title}>Repeat Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Repeat Password"
+        value={repeatPassword}
+        onChangeText={setRepeatPassword}
+        secureTextEntry
+      />
+
+      <CustomButton
+        onPress={handleSignUp}
+        style={{ width: "80%" }}
+        text="Sign Up"
+      />
+
+      <View style={styles.signIn}>
+        <Text style={styles.signInTxt}>
+          Already in <Text style={{ fontWeight: "bold", fontFamily: "Arista", fontSize: 19 }}>Study</Text>
+          <Text style={{ fontWeight: "bold", color: "#ffde59", fontFamily: "Arista",  fontSize: 19}}>Now</Text> ?
+        </Text>
+        <Text
+          style={styles.signInText}
+          onPress={() => console.log("Navigate to Sign Ipn")}
+        >
+          Sign In
+        </Text>
+      </View>
     </View>
   );
 }
 
+const { height: screenHeight } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    backgroundColor: "#ffffff",
+    paddingTop: screenHeight * 0.12, // 12% of screen height for responsive top padding
   },
-  text: {
-    fontSize: 24,
+  title: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: "#545454",
+    alignSelf: "flex-start",
+    marginLeft: "14%",
+  },
+  input: {
+    width: "80%",
+    height: 60,
+    borderWidth: 1,
+    borderColor: "#cccccc",
+    borderRadius: 35,
+    paddingHorizontal: 15,
+    marginBottom: 30,
+    fontSize: 16,
+  },
+
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 18,
     fontWeight: "bold",
   },
+  img: {
+    width: "100%",
+    aspectRatio: 2,
+    resizeMode: "contain",
+    marginBottom: 20,
+  },
+  signIn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 50,
+    width: "100%",
+  },
+  signInTxt: {
+    fontSize: 19,
+  },
+  signInText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textDecorationLine: "underline",
+    marginLeft: 5,
+  },
+
 });

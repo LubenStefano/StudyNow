@@ -3,7 +3,7 @@ import { Link, usePathname } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 
 const tabs: { href: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { href: "/events", icon: "calendar" },
+  { href: "/calendar", icon: "calendar" },
   { href: "/", icon: "home" },
   { href: "/profile", icon: "person" },
 ];
