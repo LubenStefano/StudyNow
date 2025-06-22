@@ -5,11 +5,11 @@ interface AddEventButtonProps {
   style?: ViewStyle;
 }
 
-export default function CustomButton({ onPress, style }: AddEventButtonProps) {
+export default function CustomButton({ onPress, style}: AddEventButtonProps) {
   return (
-    <View style={[styles.container, style]}>
-      <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>
-        <Text style={styles.text}>ADD EVENT</Text>
+    <View style={[styles.container , style]}>
+      <TouchableOpacity style={styles.button } onPress={onPress} >
+        <Text style={styles.text}>Add Event </Text>
       </TouchableOpacity>
     </View>
   );
@@ -23,24 +23,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     button: {
-        position: "absolute",
-        top: 510,
         padding: 20,
-        width: "90%",
-        backgroundColor: "#ffbd59",
+        marginHorizontal: 20,
+        width: "100%",
+        backgroundColor: "#000000",
         borderRadius: 30,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
         alignItems: 'center',
     },
     text: {
-        color: '#7a4c15',
+        color: '#ffffff',
         fontWeight: 'bold',
         textAlign: 'center',
         textTransform: 'uppercase',

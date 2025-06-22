@@ -1,24 +1,31 @@
-import AddEventButton from "@/src/components/CustomButton";
-import MainCalendar from "@/src/components/mainCalendar";
-import  {StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import CustomButton from "../src/components/CustomButton";
+import MainCalendar from "../src/components/mainCalendar";
 
 export default function Index() {
   return (
-    <View style={styles.container} >
-    <MainCalendar />
-    <AddEventButton
-      onPress={() => {
-        console.log("Add Event Button Pressed");
-      }} />
+    <View style={styles.container}>
+      <MainCalendar />
+      <CustomButton
+        onPress={() => {
+          console.log("Add Event Button Pressed");
+        }}
+        style={styles.button}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
+    flex: 1,
+  },
+  button: {
+    width: "90%",
+    position: "relative",
+    top: -50,
   },
 });

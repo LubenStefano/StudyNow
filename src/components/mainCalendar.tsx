@@ -11,19 +11,9 @@ export default function MainCalendar() {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
-        width: "90%",
-        position: "absolute" as const,
-        top: 110,
-        borderRadius: 30,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        paddingHorizontal: 20,
+        paddingVertical: 50,
+        width: "100%",
         alignSelf: "center",
     },
     calendar: {
