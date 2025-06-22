@@ -1,6 +1,6 @@
 import AddEventButton from "@/src/components/CustomButton";
 import MainCalendar from "@/src/components/mainCalendar";
-import {Button, StyleSheet, Text, View } from "react-native";
+import  {StyleSheet, View } from "react-native";
 
 export default function Index() {
   return (
