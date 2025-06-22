@@ -5,7 +5,7 @@ interface AddEventButtonProps {
   style?: ViewStyle;
 }
 
-export default function AddEventButton({ onPress, style }: AddEventButtonProps) {
+export default function CustomButton({ onPress, style }: AddEventButtonProps) {
   return (
     <View style={[styles.container, style]}>
       <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>

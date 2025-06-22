@@ -1,4 +1,4 @@
-import AddEventButton from "@/src/components/AddEventButton";
+import AddEventButton from "@/src/components/CustomButton";
 import MainCalendar from "@/src/components/mainCalendar";
 import {Button, StyleSheet, Text, View } from "react-native";
 
