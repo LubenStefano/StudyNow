@@ -6,7 +6,8 @@ import TopContainer from "../src/components/topContainer";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    Arista: require("../assets/fonts/Arista-Pro-Regular-trial.ttf"),
+    Ubuntu: require("../assets/fonts/Ubuntu.ttf"),
+    ArchivoBlack: require("../assets/fonts/ArchivoBlack.ttf")
   });
   const pathname = usePathname();
 
