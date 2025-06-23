@@ -4,6 +4,7 @@ interface Event {
   title: string;
   date: Date;
   type: "upcoming" | "waiting" | "finished";
+  status?: "passed" | "failed"; 
 }
 
 export default function useEvents() {
@@ -15,19 +16,22 @@ export default function useEvents() {
     return new Promise<Event[]>((resolve) => {
       setTimeout(() => {
         const data: Event[] = [
-          { title: "Math Final", date: new Date(2024, 5, 10), type: "upcoming" },
-          { title: "Physics Midterm", date: new Date(2024, 6, 15), type: "waiting" },
-          { title: "Chemistry Quiz", date: new Date(2024, 5, 20), type: "finished" },
-          { title: "Biology Test", date: new Date(2024, 7, 5), type: "upcoming" },
-          { title: "History Exam", date: new Date(2024, 8, 1), type: "waiting" },
-          { title: "English Literature Quiz", date: new Date(2024, 6, 25), type: "finished" },
-          { title: "Computer Science Final", date: new Date(2024, 5, 30), type: "upcoming" },
-          { title: "Geography Test", date: new Date(2024, 7, 12), type: "waiting" },
-          { title: "French Oral Exam", date: new Date(2024, 8, 10), type: "finished" },
-          { title: "Economics Midterm", date: new Date(2024, 6, 18), type: "upcoming" },
+          { title: "Math Final", date: new Date(2025, 5, 23), type: "upcoming" }, // 23.6.2025
+          { title: "Physics Midterm", date: new Date(2025, 5, 24), type: "waiting" }, // 24.6.2025
+          { title: "Chemistry Quiz", date: new Date(2025, 5, 20), type: "finished", status: "passed" }, // 20.6.2025
+          { title: "Biology Test", date: new Date(2025, 5, 26), type: "upcoming" }, // 26.6.2025
+          { title: "History Exam", date: new Date(2025, 5, 27), type: "waiting" }, // 27.6.2025
+          { title: "English Literature Quiz", date: new Date(2025, 5, 21), type: "finished", status: "failed" }, // 21.6.2025
+          { title: "Computer Science Final", date: new Date(2025, 5, 29), type: "upcoming" }, // 29.6.2025
+          { title: "Geography Test", date: new Date(2025, 5, 30), type: "waiting" }, // 30.6.2025
+          { title: "French Oral Exam", date: new Date(2025, 5, 19), type: "finished", status: "passed" }, // 19.6.2025
+          { title: "Economics Midterm", date: new Date(2025, 6, 2), type: "upcoming" }, // 2.7.2025
         ];
-        resolve(data.filter((event) => event.type === type));
-      }, 2000); // Simulate 1 second delay
+        const filtered = data
+          .filter((event) => event.type === type)
+          .sort((a, b) => Math.abs(a.date.getTime() - Date.now()) - Math.abs(b.date.getTime() - Date.now()));
+        resolve(filtered);
+      }, 1000); // Simulate 1 second delay
     }).finally(() => {
       setLoading((prev) => ({ ...prev, [type]: false }));
     });
@@ -40,3 +44,4 @@ export default function useEvents() {
 
   return { events, loading, loadEvents };
 }
+

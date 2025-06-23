@@ -39,6 +39,7 @@ export default function SignIn() {
                 date={item.date}
                 type={item.type}
                 style={styles.eventCard}
+                status={item.status} // Pass status if available
               />
             )}
           />
