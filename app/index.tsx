@@ -1,103 +1,199 @@
+import CustomButton from "@/src/components/CustomButton";
+import EventCard from "@/src/components/eventCard";
+import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import EventCard from "../src/components/eventCard";
-import useEvents from "../src/hooks/useEvents";
-import useLoader from "../src/hooks/useLoader";
+import {
+  Alert,
+  Clipboard,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-export default function SignIn() {
-  const { events, loading, loadEvents } = useEvents();
-  const { renderLoader } = useLoader(styles.loader);
+export default function ProfileScreen() {
+  const userName = "LubenStefano";
+  const friendID = "3qs4k4qHkVaSE8R6UuLGhuCMuG";
 
-  const [sections, setSections] = useState({
-    upcoming: false,
-    waiting: false,
-    finished: false,
-  });
+  const [inputID, setInputID] = useState("");
 
-  const toggleSection = async (section: "upcoming" | "waiting" | "finished") => {
-    setSections((prev) => ({ ...prev, [section]: !prev[section] })); // Toggle section state
-    if (!sections[section] && !events[section]) {
-      loadEvents(section); 
-    }
+  const [showPassedExams, setShowPassedExams] = useState(false); // State for toggle
+
+  const passedExams = [
+    {
+      title: "Chemistry Quiz",
+      date: new Date(2025, 5, 20),
+      type: "finished",
+      status: "passed",
+    }, // 20.6.2025
+    {
+      title: "French Oral Exam",
+      date: new Date(2025, 5, 19),
+      type: "finished",
+      status: "passed",
+    }, // 19.6.2025
+  ];
+
+  const copyToClipboard = () => {
+    Clipboard.setString(friendID);
+    Alert.alert("Copied", "Your Friend ID has been copied to clipboard!");
   };
 
-  const renderSection = (title: string, type: "upcoming" | "waiting" | "finished") => (
-    <View style={styles.section}>
-      <TouchableOpacity onPress={() => toggleSection(type)}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-      </TouchableOpacity>
-      {sections[type] && (
-        loading[type] ? (
-          renderLoader(true) // Use loader here
-        ) : (
-          <FlatList
-            data={events[type] || []}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <EventCard
-                title={item.title}
-                date={item.date}
-                type={item.type}
-                style={styles.eventCard}
-                status={item.status} // Pass status if available
-              />
-            )}
-          />
-        )
-      )}
-    </View>
-  );
+  const addFriend = () => {
+    if (inputID.trim() === "") {
+      Alert.alert("Error", "Please enter a valid Friend ID!");
+      return;
+    }
+    Alert.alert("Success", `Friend with ID ${inputID} added!`);
+    setInputID("");
+  };
+
+  const logOut = () => {
+    Alert.alert("Logged out", "You have been logged out.");
+  };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={["upcoming", "waiting", "finished"]}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) =>
-          renderSection(
-            sections[item as "upcoming" | "waiting" | "finished"]
-              ? item === "upcoming"
-                ? "Upcoming Events ▲"
-                : item === "waiting"
-                ? "Waiting for Result ▲"
-                : "Finished Events ▲"
-              : item === "upcoming"
-              ? "Upcoming Events ▼"
-              : item === "waiting"
-              ? "Waiting for Result ▼"
-              : "Finished Events ▼",
-            item as "upcoming" | "waiting" | "finished"
-          )
-        }
+    <ScrollView contentContainerStyle={styles.container}>
+      <View
+        style={{ alignItems: "center", flexDirection: "row", marginBottom: 20 }}
+      >
+        <View style={[styles.avatar, { backgroundColor: "#00CFFF" }]}>
+          <Text style={styles.avatarText}>{userName.charAt(0)}</Text>
+        </View>
+        <Text style={styles.userName}>{userName}</Text>
+      </View>
+
+      <Text style={styles.sectionTitle}>Add Friends</Text>
+
+      <Text style={styles.label}>Your Friend ID</Text>
+      <View style={styles.friendIDContainer}>
+        <Text style={styles.friendID}>{friendID}</Text>
+        <MaterialIcons
+          name="content-copy"
+          size={24}
+          color="#333"
+          onPress={copyToClipboard}
+        />
+      </View>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Add friend"
+        value={inputID}
+        onChangeText={setInputID}
       />
-    </View>
-  ); 
+
+      <CustomButton
+        text="Add friend"
+        onPress={addFriend}
+        style={styles.btn}
+        color="#0cc0df"
+      />
+
+      <View style={{ width: "100%", marginBottom: 20 }}>
+        <TouchableOpacity onPress={() => setShowPassedExams(!showPassedExams)}>
+          <Text style={[styles.sectionTitle, { marginTop: 30 }]}>
+            Passed Exams {showPassedExams ? "▲" : "▼"}
+          </Text>
+        </TouchableOpacity>
+        {showPassedExams && (
+          <View>
+            {passedExams.map((exam, index) => (
+              <EventCard
+                key={index}
+                title={exam.title}
+                date={exam.date}
+                type={exam.type as "finished" | "upcoming" | "waiting"}
+                status={exam.status as "passed" | "failed"}
+                style={{ marginBottom: 20 }}
+              />
+            ))}
+            {passedExams.length === 0 && (
+              <Text style={{ textAlign: "center", color: "#999" }}>
+                No passed exams yet.
+              </Text>
+            )}
+          </View>
+        )}
+      </View>
+
+      <CustomButton
+        text="Logout"
+        onPress={logOut}
+        style={styles.btn}
+        color="red"
+      />
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#fff",
+    flexGrow: 1,
   },
-  section: {
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#00CFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    marginRight: 20,
+  },
+  avatarText: {
+    fontSize: 40,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  userName: {
+    fontSize: 30,
+    fontWeight: "bold",
     marginBottom: 20,
-    width: "90%",
-    alignSelf: "center",
-    backgroundColor: "#ffffff",
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    alignSelf: "flex-start",
   },
-  eventCard: {
+  label: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  friendIDContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#333",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    width: "100%",
+    marginBottom: 20,
+    justifyContent: "space-between",
+  },
+  friendID: {
+    flex: 1,
+    marginRight: 10,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  input: {
+    borderColor: "#333",
+    borderWidth: 1,
+    borderRadius: 8,
+    width: "100%",
+    padding: 10,
     marginBottom: 20,
   },
-  loader: {
-    left: "40%",
+  btn: {
+    width: "100%",
+    marginBottom: 20,
   },
 });
