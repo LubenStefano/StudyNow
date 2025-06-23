@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "80%",
-    position: "absolute",
-    bottom: screenHeight * 0.15,
+    position: "relative",
+    bottom: screenHeight * 0.08,
   },
 });

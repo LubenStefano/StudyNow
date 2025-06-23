@@ -12,6 +12,7 @@ export default function Main() {
         }}
         style={styles.button}
         text="Add Event"
+        color="#000000"
       />
     </View>
   );
