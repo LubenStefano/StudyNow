@@ -13,8 +13,6 @@ export default function RootLayout() {
         return "Events";
       case "/profile":
         return "Profile";
-      case "/register":
-        return "Register";
       default:
         return "Calendar";
     }
@@ -30,7 +28,7 @@ export default function RootLayout() {
     return <Text>Loading fonts...</Text>; // TODO custom loading screen
   }
 
-  const showNavbarAndTopContainer = pathname !== "/l" && pathname !== "/register"; //TODO CHANGE THIS "/'"
+  const showNavbarAndTopContainer = pathname !== "/" && pathname !== "/register";
 
   return (
     <>

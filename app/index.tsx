@@ -1,199 +1,140 @@
+import Bee from "@/src/components/Bee";
 import CustomButton from "@/src/components/CustomButton";
-import EventCard from "@/src/components/eventCard";
-import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Alert,
-  Clipboard,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Dimensions, Image, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 
-export default function ProfileScreen() {
-  const userName = "LubenStefano";
-  const friendID = "3qs4k4qHkVaSE8R6UuLGhuCMuG";
+export default function SignIn() {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [inputID, setInputID] = useState("");
+  const handleSignIn = () => {
+    console.log("Username:", username);
+    console.log("Password:", password);
 
-  const [showPassedExams, setShowPassedExams] = useState(false); // State for toggle
-
-  const passedExams = [
-    {
-      title: "Chemistry Quiz",
-      date: new Date(2025, 5, 20),
-      type: "finished",
-      status: "passed",
-    }, // 20.6.2025
-    {
-      title: "French Oral Exam",
-      date: new Date(2025, 5, 19),
-      type: "finished",
-      status: "passed",
-    }, // 19.6.2025
-  ];
-
-  const copyToClipboard = () => {
-    Clipboard.setString(friendID);
-    Alert.alert("Copied", "Your Friend ID has been copied to clipboard!");
-  };
-
-  const addFriend = () => {
-    if (inputID.trim() === "") {
-      Alert.alert("Error", "Please enter a valid Friend ID!");
-      return;
+    if (username === "admin" && password === "admin") {
+      router.push("/main"); // Navigate to main.tsx
+    } else {
+      Alert.alert("Error", "Invalid credentials!");
     }
-    Alert.alert("Success", `Friend with ID ${inputID} added!`);
-    setInputID("");
-  };
-
-  const logOut = () => {
-    Alert.alert("Logged out", "You have been logged out.");
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View
-        style={{ alignItems: "center", flexDirection: "row", marginBottom: 20 }}
-      >
-        <View style={[styles.avatar, { backgroundColor: "#00CFFF" }]}>
-          <Text style={styles.avatarText}>{userName.charAt(0)}</Text>
-        </View>
-        <Text style={styles.userName}>{userName}</Text>
-      </View>
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <View style={styles.container}>
+      <Image
+        source={require("../assets/images/logoDesign.png")}
+        style={styles.img}
+      />
 
-      <Text style={styles.sectionTitle}>Add Friends</Text>
-
-      <Text style={styles.label}>Your Friend ID</Text>
-      <View style={styles.friendIDContainer}>
-        <Text style={styles.friendID}>{friendID}</Text>
-        <MaterialIcons
-          name="content-copy"
-          size={24}
-          color="#333"
-          onPress={copyToClipboard}
-        />
-      </View>
-
+      <Text style={styles.title}>Username</Text>
       <TextInput
         style={styles.input}
-        placeholder="Add friend"
-        value={inputID}
-        onChangeText={setInputID}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <Text style={styles.title}>Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
       />
 
       <CustomButton
-        text="Add friend"
-        onPress={addFriend}
-        style={styles.btn}
-        color="#0cc0df"
+        onPress={handleSignIn}
+        style={ styles.btn}
+        text="Sign In"
+        color="#000000"
       />
 
-      <View style={{ width: "100%", marginBottom: 20 }}>
-        <TouchableOpacity onPress={() => setShowPassedExams(!showPassedExams)}>
-          <Text style={[styles.sectionTitle, { marginTop: 30 }]}>
-            Passed Exams {showPassedExams ? "▲" : "▼"}
-          </Text>
-        </TouchableOpacity>
-        {showPassedExams && (
-          <View>
-            {passedExams.map((exam, index) => (
-              <EventCard
-                key={index}
-                title={exam.title}
-                date={exam.date}
-                type={exam.type as "finished" | "upcoming" | "waiting"}
-                status={exam.status as "passed" | "failed"}
-                style={{ marginBottom: 20 }}
-              />
-            ))}
-            {passedExams.length === 0 && (
-              <Text style={{ textAlign: "center", color: "#999" }}>
-                No passed exams yet.
-              </Text>
-            )}
-          </View>
-        )}
+      <View style={styles.register}>
+        <Text style={styles.registerText}>
+          New to <Text style={{ fontWeight: "bold", fontFamily: "Arista", fontSize: 19 }}>Study</Text>
+          <Text style={{ fontWeight: "bold", color: "#ffde59", fontFamily: "Arista",  fontSize: 19}}>Now</Text> ?
+        </Text>
+        <Text
+          style={styles.signUpText}
+          onPress={() => router.push("/register")}
+        >
+          Sign Up
+        </Text>
       </View>
 
-      <CustomButton
-        text="Logout"
-        onPress={logOut}
-        style={styles.btn}
-        color="red"
-      />
-    </ScrollView>
+      
+
+      <Bee style={styles.bee} />
+    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
+const { height: screenHeight } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-    flexGrow: 1,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#00CFFF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-    marginRight: 20,
-  },
-  avatarText: {
-    fontSize: 40,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  userName: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    alignSelf: "flex-start",
-  },
-  label: {
-    alignSelf: "flex-start",
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  friendIDContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "#333",
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    width: "100%",
-    marginBottom: 20,
-    justifyContent: "space-between",
-  },
-  friendID: {
     flex: 1,
-    marginRight: 10,
-    color: "#333",
-    fontWeight: "bold",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    paddingTop: screenHeight * 0.12, // 12% of screen height for responsive top padding
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: "#545454",
+    alignSelf: "flex-start",
+    marginLeft: "14%",
   },
   input: {
-    borderColor: "#333",
+    width: "80%",
+    height: 60,
     borderWidth: 1,
-    borderRadius: 8,
+    borderColor: "#cccccc",
+    borderRadius: 35,
+    paddingHorizontal: 15,
+    marginBottom: 30,
+    fontSize: 16,
+    color: "#cccccc",
+  },
+  img: {
     width: "100%",
-    padding: 10,
+    aspectRatio: 2,
+    resizeMode: "contain",
     marginBottom: 20,
   },
-  btn: {
+  register: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 50,
     width: "100%",
-    marginBottom: 20,
+  },
+  registerText: {
+    fontSize: 19,
+  },
+  signUpText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textDecorationLine: "underline",
+    marginLeft: 5,
+  },
+  bee: {
+    position: "absolute",
+    bottom: 70,
+    left: -120,
+    height: "9%",
+    resizeMode: "contain",
+    transform: [{ rotateY: "180deg" }],
+  },
+  btn: {
+    width: "80%",
+    position: "absolute",
+    bottom: screenHeight * 0.25,
   },
 });
