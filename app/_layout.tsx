@@ -35,7 +35,7 @@ export default function RootLayout() {
   return (
     <>
       {showNavbarAndTopContainer && <TopContainer TitlePage={TitlePage} />}
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#ffffff" } }} />
       {showNavbarAndTopContainer && <Navbar />}
     </>
   );
